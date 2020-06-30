@@ -1,6 +1,7 @@
 package com.stormnet.figuresfx.controller;
 
 import com.stormnet.figuresfx.drawutils.Drawer;
+import com.stormnet.figuresfx.exceptions.FigureException;
 import com.stormnet.figuresfx.figures.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,10 +29,11 @@ public class MainScreenViewController implements Initializable {
         random = new Random(System.currentTimeMillis());
     }
 
-    private Figure createFigure(double x, double y) {
+    private Figure createFigure(double x, double y) throws FigureException {
         Figure figure = null;
+        int type;
 
-        switch (random.nextInt(4)) {
+                switch(type = random.nextInt(4)) {
             case Figure.FIGURE_TYPE_CIRCLE:
                 figure = new Circle(x, y, Math.min(random.nextInt(50), 50), Color.GREEN, random.nextInt(50));
                 break;
@@ -47,7 +49,7 @@ public class MainScreenViewController implements Initializable {
                 figure = new Triangle(x, y, Math.min(random.nextInt(50), 50), Color.BLUEVIOLET, xPoints, yPoints);
                 break;
             default:
-                System.out.println("Unknown figure type!");
+                throw new FigureException("Unknown figure type!", type);
         }
         return figure;
     }
@@ -61,7 +63,13 @@ public class MainScreenViewController implements Initializable {
 
     @FXML
     private void onMousedClicked(MouseEvent mouseEvent) {
-        figures.add(createFigure(mouseEvent.getX(), mouseEvent.getY()));
-        repaint();
+        try{
+            figures.add(createFigure(mouseEvent.getX(), mouseEvent.getY()));
+            repaint();
+        }catch (FigureException ex){
+            System.out.println(ex.getMessage());
+        }
+
+
     }
 }
