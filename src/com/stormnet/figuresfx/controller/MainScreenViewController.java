@@ -3,6 +3,7 @@ package com.stormnet.figuresfx.controller;
 import com.stormnet.figuresfx.drawutils.Drawer;
 import com.stormnet.figuresfx.exceptions.FigureException;
 import com.stormnet.figuresfx.figures.*;
+import org.apache.log4j.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -19,13 +20,14 @@ public class MainScreenViewController implements Initializable {
 
     private List<Figure> figures = new ArrayList<>();
     private Random random;
+    private final static Logger logger = Logger.getLogger(MainScreenViewController.class);
 
     @FXML
     private Canvas canvas;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("App is initialized!");
+        logger.info("App is initialized!");
         random = new Random(System.currentTimeMillis());
     }
 
@@ -33,7 +35,7 @@ public class MainScreenViewController implements Initializable {
         Figure figure = null;
         int type;
 
-                switch(type = random.nextInt(4)) {
+        switch (type = random.nextInt(4)) {
             case Figure.FIGURE_TYPE_CIRCLE:
                 figure = new Circle(x, y, Math.min(random.nextInt(50), 50), Color.GREEN, random.nextInt(50));
                 break;
@@ -63,13 +65,12 @@ public class MainScreenViewController implements Initializable {
 
     @FXML
     private void onMousedClicked(MouseEvent mouseEvent) {
-        try{
+        try {
             figures.add(createFigure(mouseEvent.getX(), mouseEvent.getY()));
             repaint();
-        }catch (FigureException ex){
-            System.out.println(ex.getMessage());
+        } catch (FigureException ex) {
+            logger.error(ex.getMessage());
         }
-
 
     }
 }
