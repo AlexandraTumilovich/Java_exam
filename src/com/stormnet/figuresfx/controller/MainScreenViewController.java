@@ -37,19 +37,31 @@ public class MainScreenViewController implements Initializable {
 
         switch (type) {
             case Figure.FIGURE_TYPE_CIRCLE:
-                figure = new Circle(x, y, myRandomSize(5,5), Color.RED, myRandomSize(50,15));
+                int circleRadius = myRandomSize(50,15);
+                figure = new Circle(x, y, myRandomSize(5,5), Color.RED, circleRadius);
+                logger.info("New circle with radius: " + circleRadius + ".");
                 break;
             case Figure.FIGURE_TYPE_RECTANGLE:
-                figure = new Rectangle(x, y, random.nextInt(5) + 5, Color.PINK, random.nextInt(60), random.nextInt(80));
+                // Here we can catch example of error for rectangle line width! See log file.
+                int rectangleWidth = myRandomSize(60,1);
+                int rectangleHeight = myRandomSize(80,1);
+                figure = new Rectangle(x, y, random.nextInt(5), Color.PINK, rectangleWidth, rectangleHeight);
+                logger.info("New rectangle with sides: " + rectangleWidth + " and " + rectangleHeight + ".");
                 break;
             case Figure.FIGURE_TYPE_TRIANGLE:
                 double[] xTriangle = {myRandomSize(50,1), myRandomSize(50,1), myRandomSize(50,1)};
                 double[] yTriangle = {myRandomSize(50,1), myRandomSize(50,1), myRandomSize(50,1)};
                 figure = new Triangle(x, y, myRandomSize(5,2), Color.ORCHID, xTriangle, yTriangle);
+                logger.info("New triangle with coordinates: x [" + (x - xTriangle[0]) + ","+ (x - xTriangle[1]) + "," + (x + xTriangle[2]) +
+                        "], y [" + (y - yTriangle[0]) + ","+ (y - yTriangle[1]) + "," + (y - yTriangle[2]) + "].");
                 break;
             case Figure.FIGURE_TYPE_ARC:
-                figure = new Arc(x, y, myRandomSize(5,2), Color.AQUAMARINE, myRandomSize(80,30),
-                        myRandomSize(80,30), myRandomSize(300,50), myRandomSize(300,50));
+                double heightArc = myRandomSize(80,30);
+                double widthArc = myRandomSize(80,30);
+                double startAngleArc = myRandomSize(300,50);
+                double arcExtentArc = myRandomSize(300,50);
+                figure = new Arc(x, y, myRandomSize(5,2), Color.AQUAMARINE, heightArc, widthArc, startAngleArc, arcExtentArc);
+                logger.info("New arc is created: height: " + heightArc + ", width: " + widthArc + ", startAngle: " + startAngleArc + ", arcExtentArc: " + arcExtentArc + ".");
                 break;
             default:
                 throw new UnknownFigureException(type);
