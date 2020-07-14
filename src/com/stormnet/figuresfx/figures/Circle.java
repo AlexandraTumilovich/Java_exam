@@ -1,12 +1,15 @@
 package com.stormnet.figuresfx.figures;
 
+import com.stormnet.figuresfx.exceptions.InvalidSizeException;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import org.apache.log4j.Logger;
 
 import java.util.Objects;
 
 public class Circle extends Figure {
-   private double radius;
+    private double radius;
+    private final static Logger logger = Logger.getLogger(Circle.class);
 
     private Circle(double cx, double cy, double lineWidth, Color color) {
         super(FIGURE_TYPE_CIRCLE, cx, cy, lineWidth, color);
@@ -14,6 +17,13 @@ public class Circle extends Figure {
 
     public Circle(double cx, double cy, double lineWidth, Color color, double radius) {
         this(cx, cy, lineWidth, color);
+        try {
+            if (radius <= 0) {
+                throw new InvalidSizeException("Invalid circle radius: ", radius);
+            }
+        } catch (InvalidSizeException e) {
+            logger.error(e.getMessage() + e.getSize());
+        }
         this.radius = radius < 10 ? 50 : radius;
     }
 
